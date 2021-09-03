@@ -1,0 +1,125 @@
+{
+    "resources": [
+        {
+            "name": "controller/Main-dbg.controller.js",
+            "isDebug": true
+        },
+        {
+            "name": "i18n/i18n_fr.properties",
+            "raw": "i18n/i18n.properties",
+            "locale": "_fr"
+        },
+        {
+            "name": "i18n/i18n_fr_FR.properties",
+            "raw": "i18n/i18n.properties",
+            "locale": "_fr_FR"
+        },
+        {
+            "name": "i18n/i18n.properties",
+            "raw": "i18n/i18n.properties"
+        },
+        {
+            "name": "Component.js"
+        },
+        {
+            "name": "model/models.js"
+        },
+        {
+            "name": "model/formatter.js"
+        },
+        {
+            "name": "controller/Main.controller.js"
+        },
+        {
+            "name": "manifest.json"
+        },
+        {
+            "name": "Component-preload.js",
+            "merged": true
+        },
+        {
+            "name": "manifest-bundle.zip"
+        },
+        {
+            "name": "model/formatter-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "model/models-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "i18n/i18n_en.properties",
+            "raw": "i18n/i18n.properties",
+            "locale": "_en"
+        },
+        {
+            "name": "Component-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "Component-preload-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../sap-ui-version.json"
+        },
+        {
+            "name": "view/fragment/riskCard.fragment.xml"
+        },
+        {
+            "name": "view/fragment/QuickView.fragment.xml"
+        },
+        {
+            "name": "view/fragment/DisplayDetailFfId.fragment.xml"
+        },
+        {
+            "name": "view/fragment/Attachments.fragment.xml"
+        },
+        {
+            "name": "view/fragment/AddUsers.fragment.xml"
+        },
+        {
+            "name": "view/fragment/AddFfId.fragment.xml"
+        },
+        {
+            "name": "view/Main.view.xml"
+        },
+        {
+            "name": "img/ffa.jpg"
+        },
+        {
+            "name": "img/9.png"
+        },
+        {
+            "name": "img/8.png"
+        },
+        {
+            "name": "img/7.png"
+        },
+        {
+            "name": "img/6.png"
+        },
+        {
+            "name": "img/5.png"
+        },
+        {
+            "name": "img/4.png"
+        },
+        {
+            "name": "img/3.png"
+        },
+        {
+            "name": "img/2.png"
+        },
+        {
+            "name": "img/1.png"
+        },
+        {
+            "name": "css/style.css"
+        },
+        {
+            "name": "index.html"
+        }
+    ]
+}

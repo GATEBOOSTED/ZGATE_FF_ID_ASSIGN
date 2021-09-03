@@ -1,0 +1,108 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:dnd="sap.ui.core.dnd"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:u="sap.ui.unified"
+    xmlns:f2="sap.f"
+    xmlns:uxap="sap.uxap"
+    xmlns:rich="sap.ui.richtexteditor">
+    <Dialog title="{Risk>/DescnRisk} - {Risk>/Riskid}" contentWidth="70%">
+        <ObjectHeader title="{i18n>LBL_RISK} : {Risk>/DescnRisk} - {Risk>/Riskid}">
+            <ObjectAttribute text="{i18n>LBL_RISK_LVL} : {Risk>/DescnRisklevel}" />
+        </ObjectHeader>
+        
+        <Panel headerText="{i18n>LBL_FRAUD_PATTERN}" width="auto" class="sapUiResponsiveMargin" expanded="true">
+            <content>
+                <VBox >
+                    <FormattedText class="formatterBlock" visible="true" htmlText="{Risk>/FraudPattern}"/>
+                </VBox>
+            </content>
+        </Panel>
+        <Panel headerText="{i18n>LBL_SEC_ICBESTPRAC}" width="auto" class="sapUiResponsiveMargin" expanded="true">
+            <content>
+                <VBox >
+                    <VBox >
+                        <FormattedText class="formatterBlock" htmlText="{Risk>/RiskDetails}"/>
+                    </VBox>
+                </VBox>
+            </content>
+        </Panel>
+        <Panel expanded="true" headerText="{i18n>LBL_SEC_RSKDET}" width="auto" class="sapUiResponsiveMargin">
+            <content>
+                <VBox >
+                    <VBox >
+                        <Table items="{RFunctions>/}">
+                            <columns>
+                                <Column vAlign="Top" width="8em">
+                                    <Text text="{i18n>LBL_COL_FUNCTION}" />
+                                </Column>
+                                <Column vAlign="Top">
+                                    <Text text="{i18n>LBL_COL_FUNCDESC}" />
+                                </Column>
+                                <Column>
+                                    <Text text="{i18n>LBL_COL_TCODE}" />
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem >
+                                    <Text text="{RFunctions>Functid}" />
+                                    <Text text="{RFunctions>DescnFunct}" />
+                                    <Panel expanded="false" expandable="true">
+                                        <headerToolbar>
+                                            <OverflowToolbar >
+                                                <Text text="{i18n>LBL_COL_TCODES} ( {=${RFunctions>FunctionsToGetActions/results/}.length} )" />
+                                            </OverflowToolbar>
+                                        </headerToolbar>
+                                        <content>
+                                            <List items="{
+                                                path : 'RFunctions>FunctionsToGetActions/results/',
+                                                templateShareable:false
+                                            }">
+                                                <items>
+                                                    <StandardListItem title="{RFunctions>Action} : {RFunctions>DescnAction}" />
+                                                </items>
+                                            </List>
+                                        </content>
+                                    </Panel>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </VBox>
+                </VBox>
+            </content>
+        </Panel>
+        <Panel expanded="true" headerText="{i18n>LBL_SEC_ADDDOC}" width="auto" class="sapUiResponsiveMargin">
+            <content>
+                <VBox >
+                    <VBox >
+                        <Table items="{
+                            path:'RDocuments>/',
+                            templateShareable:false
+                            }">
+
+                            <columns>
+                                <Column>
+                                    <Text text="{i18n>LBL_COL_DOCUMENT}" />
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem visible="true">
+                                    <HBox>
+                                        <core:Icon class="sapUiSmallMarginEnd" src="sap-icon://chain-link" />
+                                        <Link href="{RDocuments>Link}" target="_blank" text="{RDocuments>Link}" />
+                                    </HBox>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </VBox>
+                </VBox>
+            </content>
+        </Panel>
+
+        <endButton>
+            <Button text="{i18n>LBL_CLOSE}" press="handleCloseRiskCardDialog"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

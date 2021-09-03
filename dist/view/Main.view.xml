@@ -1,0 +1,631 @@
+<mvc:View controllerName="GATE.ZGATE_FF_ASS.controller.Main" 
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:l="sap.ui.layout"
+    xmlns:fb="sap.ui.comp.filterbar"
+	xmlns:f="sap.ui.layout.form"
+    xmlns:f2="sap.f"
+    xmlns:uxap="sap.uxap"
+    xmlns:tab="sap.ui.table"
+    xmlns:dnd="sap.ui.core.dnd"
+    xmlns:u="sap.ui.unified"
+    displayBlock="true">
+
+    <f2:FlexibleColumnLayout id="myFCL">
+        <f2:beginColumnPages>
+                <App id="app" backgroundImage="{imageModel>/path}/img/1.png" backgroundOpacity="0.2">
+                    <!--<pages>-->
+                        <Page id="page" title="{i18n>title}" backgroundDesign="Transparent">
+
+                            <customHeader>
+                                <Bar>
+                                    <contentRight>
+                                        <Button id="bRefresh"       type="Emphasized" icon="sap-icon://refresh" press="handleRefresh" />
+                                    </contentRight>
+                                </Bar>
+                            </customHeader>
+
+                            <content>
+                                <VBox class="sapUiSmallMargin">
+
+                                    <Image src="{imageModel>/path}/img/ffa.jpg" width="100%">
+                                        <layoutData>
+                                            <FlexItemData growFactor="1" />
+                                        </layoutData>
+                                    </Image>
+
+                                    <f:Form editable="true">
+                                        <f:layout>
+                                            <f:ColumnLayout/>
+                                        </f:layout>
+                                        <f:formContainers>
+                                            <f:FormContainer>
+                                                <f:formElements>
+
+                                                    <f:FormElement label="{i18n>lblSystem}">
+                                                        <Select
+                                                            id="sGlobalSystem"
+                                                            width="50%"
+                                                            forceSelection="false"
+                                                            change="onAfterSystemSelection"
+                                                            selectedKey="{GlobalData>/System}"
+                                                            class="sapUiSmallMarginEnd"
+                                                            items="{
+                                                                path: '/SystemsSet',
+                                                                templateShareable:false,
+                                                                sorter: { path: 'Connector' }
+                                                            }">            
+                                                            <core:Item key="{Connector}" text="{Connector}" />
+                                                        </Select>
+                                                    </f:FormElement> 
+
+                                                    <f:FormElement label="{i18n>lblReference}">
+                                                        <f:fields>
+                                                            <Input id="iSnowTicket" value="{GlobalData>/ReferenceTicket}" submit="CheckSNOWReferenceTicket" width="50%"/>
+                                                        </f:fields>
+                                                    </f:FormElement>                                            
+                                                </f:formElements>
+
+                                            </f:FormContainer>
+                                            <f:FormContainer>
+                                                <f:formElements>
+                                                    <f:FormElement label="{i18n>lblAssValDate}">
+                                                        <DatePicker id="iValDateFrom" valueFormat="dd/MM/yyyy" placeholder="DD/MM/YYYY"
+                                                            value="{GlobalData>/ValDateFrom}"
+                                                        change="onChangeHeaderDates"
+                                                        displayFormat="dd/MM/yyyy"/>
+                                                        <DatePicker id="iValDateTo"   valueFormat="dd/MM/yyyy" placeholder="DD/MM/YYYY"
+                                                                    value="{GlobalData>/ValDateTo}"
+                                                        change="onChangeHeaderDates"
+                                                        displayFormat="dd/MM/yyyy"/>
+                                                    </f:FormElement>
+                                                </f:formElements>
+                                            </f:FormContainer>
+                                        </f:formContainers>
+                                    </f:Form>
+
+                                    <IconTabBar id="iconTabBarNoIcons" class="sapUiResponsiveContentPadding" 
+                                                selectedKey='{GlobalData>/IconTabSelectedKey}' select="handleTabBarSelect">
+                                        <items >
+
+                                            <IconTabFilter text="{i18n>lblSelectUsers}" key="1"
+                                                        icon="sap-icon://add-employee" design="Horizontal">
+                    
+                                                <Table  id="tUsers" fixedLayout="false" 
+                                                        alternateRowColors="true" class="sapUiResponsiveMargin" 
+                                                        width="auto" noDataText="{i18n>lblAddUsersNoData}"
+                                                        items="{path: 'SelectedUsersModel>/'}">
+                                                    <headerToolbar>
+                                                        <Toolbar>
+                                                        <Title text="{i18n>lblUsersForFfAssign}"/>
+                                                            <ToolbarSpacer/>
+                                                            <Button id="btnAddUsersDialog" icon="sap-icon://add" type="Emphasized" 
+                                                            press="onAddAddUsersDialog" 
+                                                            visible="true"/>
+                                                        </Toolbar>
+                                                    </headerToolbar>
+                                                    <columns>
+                                                        <Column width="6%">
+                                                            <Text text="{i18n>lblAddUsersAction}"/>
+                                                        </Column>
+                                                        <Column width="12%">
+                                                            <Text text="{i18n>lblAddUsersUserId}"/>
+                                                        </Column>
+                                                        <Column width="12%">
+                                                            <Text text="{i18n>lblAddUsersFname}"/>
+                                                        </Column>
+                                                        <Column width="12%">
+                                                            <Text text="{i18n>lblAddUsersLname}"/>
+                                                        </Column>
+                                                        <Column width="23%">
+                                                            <Text text="{i18n>lblAddUsersEmail}"/>
+                                                        </Column>
+                                                        <Column width="14%">
+                                                            <Text text="{i18n>lblAddUsersValidFrom}"/>
+                                                        </Column>
+                                                        <Column width="14%">
+                                                            <Text text="{i18n>lblAddUsersValidTo}"/>
+                                                        </Column>
+                                                        <Column hAlign="End" width='5%'>
+                                                            <Text text=""/>
+                                                        </Column>
+                                                    </columns>
+                                                    <items>
+                                                        <ColumnListItem id="itemAddUsers" vAlign="Middle"  >
+                                                            <cells>
+                                                                <Button icon="sap-icon://add-employee" enabled="false"></Button>
+                                                                <ObjectIdentifier text="{SelectedUsersModel>UserId}" />
+                                                                <ObjectIdentifier text="{SelectedUsersModel>FirstName}"  />    
+                                                                <ObjectIdentifier text="{SelectedUsersModel>LastName}"  />   
+                                                                <ObjectIdentifier text="{SelectedUsersModel>Email}"  />  
+                                                                <DatePicker value="{
+                                                                            path: 'SelectedUsersModel>ValidFrom',
+                                                                            type: 'sap.ui.model.odata.type.DateTime',
+                                                                            formatOptions: {
+                                                                                pattern: 'dd/MM/yyyy'
+                                                                            },
+                                                                            constraints: {
+                                                                                displayFormat: 'Date'
+                                                                            }
+                                                                        }" 
+                                                                    displayFormat="dd/MM/yyyy" valueFormat="dd/MM/yyyy" placeholder="DD/MM/YYYY" enabled="false"/>
+                                                                <DatePicker value="{
+                                                                                path: 'SelectedUsersModel>ValidTo',
+                                                                                type: 'sap.ui.model.odata.type.DateTime',
+                                                                                formatOptions: {
+                                                                                    pattern: 'dd/MM/yyyy'
+                                                                                },
+                                                                                constraints: {
+                                                                                    displayFormat: 'Date'
+                                                                                }
+                                                                            }"
+                                                                    displayFormat="short" valueFormat="dd/MM/yyyy" placeholder="DD/MM/YYYY" enabled="false"/>
+                                                            
+                                                                <Button width="5%" press="onDeleteUser" id="btnDleteUser" icon="sap-icon://delete" type="Reject"/>
+                                                            </cells>
+                                                        </ColumnListItem>
+                                                    </items>
+                                                </Table>
+                                            </IconTabFilter>
+
+                                            <IconTabFilter text="{i18n>lblAssignFf}" key="2"
+                                                        icon="sap-icon://role" design="Horizontal">
+                                                <Table  id="tFfToAssign" fixedLayout="false" 
+                                                        alternateRowColors="true" class="sapUiResponsiveMargin" 
+                                                        width="auto" noDataText="{i18n>lblFfToAssignNoData}"
+                                                        items="{path: 'SelectedFfIdModel>/'}">
+                                                    <headerToolbar>
+                                                        <Toolbar>
+                                                        <Title text="{i18n>lblFfToAssign}"/>
+                                                            <ToolbarSpacer/>
+                                                            <Button id="btnAddFfIdDialog" icon="sap-icon://add" type="Emphasized" 
+                                                            press="onAddFfIdToAssignDialog" 
+                                                            visible="true"/>
+                                                        </Toolbar>
+                                                    </headerToolbar>
+                                                    <columns>
+                                                        <Column width="10%">
+                                                            <Text text="{i18n>lblFfToAssignAction}"/>
+                                                        </Column>
+                                                        <Column width="12%">
+                                                            <Text text="{i18n>lblFfToAssignFfId}"/>
+                                                        </Column>
+                                                        <Column width="15%">
+                                                            <Text text="{i18n>lblFfToAssignSystem}"/>
+                                                        </Column>
+                                                        <Column width="20%">
+                                                            <Text text="{i18n>lblFfToAssignOwner}"/>
+                                                        </Column>
+                                                        <Column width="15%">
+                                                            <Text text="{i18n>lblFfToAssignValidFrom}"/>
+                                                        </Column>
+                                                        <Column width="15%">
+                                                            <Text text="{i18n>lblFfToAssignValidTo}"/>
+                                                        </Column>
+                                                        <Column hAlign="End" width='5%'>
+                                                            <Text text=""/>
+                                                        </Column>
+                                                        <Column hAlign="End" width='5%'>
+                                                            <Text text=""/>
+                                                        </Column>
+                                                    </columns>
+                                                    <items>
+                                                        <ColumnListItem id="itemFfToAssign" vAlign="Middle"  >
+                                                            <cells>
+                                                                <ObjectStatus inverted="true" text="Assign" state="Success" icon="sap-icon://accept" />
+                                                                <ObjectIdentifier text="{SelectedFfIdModel>Ffobject}" />
+                                                                <ObjectIdentifier text="{SelectedFfIdModel>Connector}"  />    
+                                                                <ObjectIdentifier text="{SelectedFfIdModel>OwnerName}" />   
+                                                                <DatePicker value="{
+                                                                                        path: 'SelectedFfIdModel>ValidFrom',
+                                                                                        type: 'sap.ui.model.odata.type.DateTime',
+                                                                                        formatOptions: {
+                                                                                            pattern: 'dd/MM/yyyy',
+                                                                                            strictParsing: true , 
+                                                                                            UTC: false
+                                                                                        }
+                                                                                    }" 
+                                                                            displayFormat="dd/MM/yyyy" valueFormat="dd/MM/yyyy" placeholder="DD/MM/YYYY" enabled="false"/>
+                                                                <DatePicker value="{
+                                                                                        path: 'SelectedFfIdModel>ValidTo',
+                                                                                        type: 'sap.ui.model.odata.type.DateTime',
+                                                                                        formatOptions: {
+                                                                                            pattern: 'dd/MM/yyyy',
+                                                                                            strictParsing: true , 
+                                                                                            UTC: false
+                                                                                        }
+                                                                                    }"
+                                                                            displayFormat="short" valueFormat="dd/MM/yyyy" placeholder="DD/MM/YYYY" enabled="false"/>
+                                                                <Button width="5%" press="onDeleteFfId" icon="sap-icon://delete" type="Reject"/>
+                                                                <Button width="5%" press="onDisplayDetailFfIdDialog" icon="sap-icon://display" type="Accept"/>
+                                                            </cells>
+                                                        </ColumnListItem>
+                                                    </items>
+                                                </Table>
+
+                                            </IconTabFilter>
+                                            
+                                            <IconTabFilter text="{i18n>lblRiskViolations}" key="3"
+                                                        icon="sap-icon://survey" design="Horizontal">
+                                                <Table  id="tRiskCheck"
+                                                            fixedLayout="false" growing="true" 
+                                                            growingThreshold="50" noDataText="{i18n>lblRiskAnalysisNotStarted}"
+                                                            sticky="HeaderToolbar"
+                                                            items="{ path: 'reportSummaryUser>/results' }" >
+                                                    <headerToolbar>
+                                                        <OverflowToolbar>
+                                                            <Title text="{i18n>lblRiskIdentif}" level="H2"/>
+                                                            <ToolbarSpacer/>
+                                                            <Button icon="sap-icon://survey" type="Emphasized" text="{i18n>lblRunAnalysis}" press="launchSoDReport"/>
+                                                            </OverflowToolbar>
+                                                    </headerToolbar>
+                                                    <columns>
+                                                        <Column width="13%">
+                                                            <Text text="{i18n>lblRiskVioUser}"/>
+                                                        </Column>
+                                                        <Column width="8%" >
+                                                            <Text text="{i18n>lblCheckRiskId}"/>
+                                                        </Column>
+                                                        <Column width="46%">
+                                                            <Text text="{i18n>lblCheckRiskDesc}"/>
+                                                        </Column>
+                                                        <Column width="9%" >
+                                                            <Text text="{i18n>lblCheckRiskLevel}"/>
+                                                        </Column>
+                                                        <Column width="12%" >
+                                                            <Text text="{i18n>lblCheckBusinessProcess}"/>
+                                                        </Column>
+                                                        <Column width="12%" >
+                                                            <Text text=""/>
+                                                        </Column>
+                                                    </columns>
+                                                    <items>
+                                                        <ColumnListItem vAlign="Middle" type="Navigation" press="navToReportDetailUser">
+                                                            <cells>
+                                                                <ObjectIdentifier title="{reportSummaryUser>Objname}"  text="{reportSummaryUser>Objectid}" />
+                                                                <Text text="{reportSummaryUser>Riskid}" />
+                                                                <Text text="{reportSummaryUser>RiskDescn}" />
+                                                                <ObjectStatus class="sapUiSmallMarginBottom" text="{reportSummaryUser>RiskLevel}" icon="sap-icon://message-information" state="{ path: 'reportSummaryUser>RiskLevel', formatter: '.formatter.highlightRiskState' }" />
+                                                                <Text text="{reportSummaryUser>BusprocDescn}" />
+                                                                <Button type="Transparent" icon="sap-icon://show" text="{i18n>LBL_RISK_CARD}" press="navToaRiskCard" visible="{ path : 'reportSummaryUser>RiskCard', formatter: '.formatter.VisibilityRiskCard'}" />
+                                                            </cells>
+                                                        </ColumnListItem>
+                                                    </items>
+                                                </Table>
+
+                                            </IconTabFilter>
+
+                                            <IconTabFilter text="{i18n>lblJustif}" key="4"
+                                                        icon="sap-icon://comment" design="Horizontal">
+
+
+                                                <VBox class="sapUiSmallMargin" alignItems="Start">
+
+                                                    <f:Form editable="true">
+                                                        <f:layout>
+                                                            <f:ColumnLayout  />
+                                                        </f:layout>
+                                                        <f:formContainers>
+                                                            <f:FormContainer>
+                                                                <f:formElements>
+                                                                    <f:FormElement label="{i18n>lblRequestName}" visible="false">
+                                                                        <f:fields>
+                                                                            <Input value="{GlobalData>/RequestName}" width="50%"/>
+                                                                        </f:fields>
+                                                                    </f:FormElement>
+                                                                    <f:FormElement label="{i18n>lblReasonCode}">
+                                                                        <f:fields>                                                        
+                                                                            <Select
+                                                                                id="sReasonCode"
+                                                                                forceSelection="false"
+                                                                                selectedKey="{GlobalData>/ReasonCode}"
+                                                                                class="sapUiSmallMarginEnd"
+                                                                                items="{
+                                                                                        path: '/ReasonCodeDataSet',
+                                                                                        templateShareable:false,
+                                                                                        sorter: { path: 'ReasonText' }
+                                                                                }"
+                                                                                >            
+                                                                                <core:Item key="{ReasonText}" text="{ReasonText}" />
+                                                                            </Select>
+                                                                            <Button visible="{GlobalData>/ReasonCodeButtonVisible}"   width="6%" icon="sap-icon://hint" press="onDisplayQuickViewReasonCode" ></Button>
+                                                                        </f:fields>
+                                                                    </f:FormElement>
+                                                                    <f:FormElement label="{i18n>lblComments}">
+                                                                        <f:fields>
+                                                                            <TextArea value="{GlobalData>/Comments}" growing="false" width="100%" placeholder="Post something here" height="15rem"/>
+                                                                        </f:fields>
+                                                                    </f:FormElement>
+                                                                </f:formElements>
+                                                            </f:FormContainer>
+                                                        </f:formContainers>
+                                                    </f:Form>
+                                                </VBox>
+                                            </IconTabFilter>
+
+                                            <IconTabFilter text="{i18n>lblAttachments}" key="5"
+                                                        icon="sap-icon://attachment" design="Horizontal"
+                                                        visible="true">
+                                                
+                                                <Table  id="tAttachments" fixedLayout="false" 
+                                                        alternateRowColors="true" class="sapUiResponsiveMargin" 
+                                                        width="auto" noDataText="No data"
+                                                        items="{path: 'SelectedAttachmentsModel>/'}">
+                                                    <headerToolbar>
+                                                        <Toolbar>
+                                                        <Title text=""/>
+                                                            <ToolbarSpacer/>
+                                                            <Button id="btnAddAttachments" icon="sap-icon://add" type="Emphasized" 
+                                                            press="onAddAttachmentsDialog" />
+                                                        </Toolbar>
+                                                    </headerToolbar>
+                                                    <columns>
+                                                        <Column hAlign="Begin" width="5%">
+                                                            <Text text=""/>
+                                                        </Column>
+                                                        <Column width="15%">
+                                                            <Text text="{i18n>lblAddAttachmentTitle}"/>
+                                                        </Column>
+                                                        <Column width="30%">
+                                                            <Text text="{i18n>lblAddAttachmentName}"/>
+                                                        </Column>
+                                                        <Column width="30%">
+                                                            <Text text="{i18n>lblAddAttachmentType}"/>
+                                                        </Column>
+                                                        <Column width="10%">
+                                                            <Text text="{i18n>lblAddAttachmentSize}"/>
+                                                        </Column>                                                        
+                                                        <Column hAlign="End" width='5%'>
+                                                            <Text text=""/>
+                                                        </Column>
+                                                    </columns>
+                                                    <items>
+                                                        <ColumnListItem vAlign="Middle"  >
+                                                            <cells>
+                                                                <Button icon="{SelectedAttachmentsModel>Icon}" enabled="false"></Button>
+                                                                <ObjectIdentifier text="{SelectedAttachmentsModel>Title}" />
+                                                                <ObjectIdentifier text="{SelectedAttachmentsModel>Name}"/>
+                                                                <ObjectIdentifier text="{SelectedAttachmentsModel>Type}"  />   
+                                                                <ObjectIdentifier text="{SelectedAttachmentsModel>Size}"/> 
+                                                                <Button width="5%" press="onDeleteAttachment" id="btnDleteAttachment" icon="sap-icon://delete" type="Reject"/>
+                                                            </cells>
+                                                        </ColumnListItem>
+                                                    </items>
+                                                </Table>
+
+                                                
+
+                                            </IconTabFilter>              
+
+                                        </items>
+                                    </IconTabBar>
+                                </VBox>
+                            </content>
+
+                            <footer >
+                                <Toolbar visible="true">
+                                    <ToolbarSpacer/>
+                                    <Button id="bSubmitRequest" text="{i18n>lblSubmitButton}"  icon="sap-icon://complete"   type="Emphasized" press="onSubmitRequest"/>
+                                </Toolbar>
+                            </footer>
+
+                        </Page>
+                    <!--</pages>-->
+                </App>
+        </f2:beginColumnPages>
+        <f2:midColumnPages>
+            <uxap:ObjectPageLayout showTitleInHeaderContent="true" alwaysShowContentHeader="false" preserveHeaderStateOnScroll="false" headerContentPinnable="true">
+                <uxap:headerTitle>
+                    <uxap:ObjectPageDynamicHeaderTitle >
+                        <uxap:expandedHeading>
+                            <FlexBox fitContainer="true" alignItems="Center" class="sapUiTinyMarginEnd">
+                                <!-- <Title text="{RiskHeader>Objname} ( {RiskHeader>/Objectid} )" class="sapUiSmallMarginEnd"/> -->
+                                <!-- <Avatar backgroundColor="Information" class="sapUiSmallMarginEnd" src="sap-icon://activity-individual" displaySize="M" displayShape="Circle"/> -->
+                                <VBox>
+                                    <Title text="{RiskHeader>/Objname} ( {RiskHeader>/Objectid} )" tooltip="{RiskHeader>/Objname} ( {RiskHeader>/Objectid} )" class="sapUiSmallMarginEnd"/>
+                                    <GenericTag text="Risk Level" design="StatusIconHidden" status="{ path : 'RiskHeader>/RiskLevel', formatter: '.formatter.StateRiskLevel'}" class="sapUiSmallMarginBottom">
+                                        <ObjectNumber state="{ path : 'RiskHeader>/RiskLevel', formatter: '.formatter.StateRiskLevel'}" number="{RiskHeader>/RiskLevel}" />
+                                    </GenericTag>
+                                    <Label text="{i18n>LBL_RISK} : {RiskHeader>/Riskid} - {RiskHeader>/RiskDescn}" />
+                                    <!-- <Label text="{i18n>LBL_RISK_LVL} : {RiskHeader>/RiskLevel}" /> -->
+                                    <Label text="{i18n>LBL_RISK_MC} : {RiskHeader>/Accontrolid}" visible="{ path : 'RiskHeader>/Accontrolid', formatter: '.formatter.VisibilityRiskMC'}"/>
+                                </VBox>
+                            </FlexBox>
+                        </uxap:expandedHeading>
+                        <uxap:snappedHeading>
+                            <!-- <Title text="{RiskHeader>Objname} ( {RiskHeader>/Objectid} )" class="sapUiSmallMarginEnd"/> -->
+                            <FlexBox fitContainer="true" alignItems="Center" class="sapUiTinyMarginEnd">
+                                <!-- <Title text="{RiskHeader>/Objname} ( {RiskHeader>/Objectid} )" class="sapUiSmallMarginEnd"/> -->
+                                <!-- <Avatar backgroundColor="Information" class="sapUiSmallMarginEnd" src="sap-icon://activity-individual" displaySize="M" displayShape="Circle"/> -->
+                                <VBox>
+                                    <Title text="{RiskHeader>/Objname} ( {RiskHeader>/Objectid} )" class="sapUiSmallMarginEnd"/>
+                                    <Label text="{i18n>LBL_RISK} {RiskHeader>/Riskid} - {RiskHeader>/RiskDescn}" />
+                                    <!-- <Label text="{i18n>LBL_RISK_LVL} {RiskHeader>/RiskLevel}" /> -->
+                                    <GenericTag text="Risk Level" design="StatusIconHidden" status="{ path : 'RiskHeader>/RiskLevel', formatter: '.formatter.StateRiskLevel'}" class="sapUiSmallMarginBottom">
+                                        <ObjectNumber state="{ path : 'RiskHeader>/RiskLevel', formatter: '.formatter.StateRiskLevel'}" number="{RiskHeader>/RiskLevel}" />
+                                    </GenericTag>
+                                    <Label text="{i18n>LBL_RISK_MC} {RiskHeader>/Accontrolid}" visible="{ path : 'RiskHeader>/Accontrolid', formatter: '.formatter.VisibilityRiskMC'}" />
+                                </VBox>
+                            </FlexBox>
+                        </uxap:snappedHeading>
+                        <uxap:navigationActions>
+                            <OverflowToolbarButton type="Emphasized" icon="sap-icon://full-screen" press="handleFullScreen" id="enterFullScreenBtn" tooltip="Enter Full Screen Mode" visible="true"/>
+                            <OverflowToolbarButton type="Emphasized" icon="sap-icon://exit-full-screen" press="handleExitFullScreen" id="exitFullScreenBtn" tooltip="Exit Full Screen Mode" visible="true"/>
+                            <OverflowToolbarButton type="Emphasized" icon="sap-icon://decline" press="handleClose" tooltip="Close column" visible="true"/>
+                        </uxap:navigationActions>
+                    </uxap:ObjectPageDynamicHeaderTitle>
+                </uxap:headerTitle>
+                <uxap:sections>
+                    <uxap:ObjectPageSection showTitle="true" titleUppercase="false" title="General Information">
+                        <uxap:subSections>
+                            <uxap:ObjectPageSubSection title="General Information">
+                                <uxap:blocks>
+                                   
+                                   
+                                   
+                                   
+                                   
+                                   
+                                    <List backgroundDesign="Solid" items="{path:'RDetails>/'}">
+
+                                        <headerToolbar>
+                                            <OverflowToolbar >
+                                                <Title text="Functions" />
+                                                <ToolbarSpacer/>
+                                                <SearchField width="30%" liveChange="onBRliveChange" placeholder="{i18n>LBL_PH_FILTER_BR}" class="sapUiSmallMargin" />
+                                            </OverflowToolbar>
+                                        </headerToolbar>
+                                        <items>
+                                            <CustomListItem class="sapUiMediumMarginBottom">
+                                                <!-- <HBox class="sapUiTinyMarginTopBottom">
+                                            <core:Icon class="sapUiTinyMarginBeginEnd" color="Negative" src="sap-icon://alert"></core:Icon>
+                                            <Title text=" Function : {RDetails>func} - DESCN"/>
+                                        </HBox> -->
+                                                <Table id="tCodesTable" fixedLayout="false" 
+                                                items="{path:'RDetails>transactions/',
+                                                              templateShareable:false   }" visible="true">
+                                                    <headerToolbar>
+                                                        <OverflowToolbar design="Transparent">
+                                                            <core:Icon class="sapUiTinyMarginBeginEnd" color="Negative" src="sap-icon://alert"></core:Icon>
+                                                            <Title text=" Function : {RDetails>func} - {RDetails>transactions/0/data/0/Funcdesc} "/>
+                                                            <ToolbarSpacer/>
+                                                        </OverflowToolbar>
+                                                    </headerToolbar>
+                                                    <items>
+                                                        <ColumnListItem >
+                                                            <cells>
+                                                                <Text text="{RDetails>tcode}"/>
+                                                                <Text text="{RDetails>data/0/Actiondesc}"/>
+                                                                <Text text="{RDetails>brole}"/>
+                                                                <Text text="{RDetails>data/0/Role}"/>
+                                                                <Text text="{RDetails>data/0/Roledesc}"/>
+                                                                <Text text="{RDetails>data/0/Executioncount}"/>
+                                                                <!-- <Text text="{RDetails>data/0/Lastexecutedon}"/> -->
+                                                                <Text text="{RDetails>Lastexecutedon}"/>
+                                                                <core:Icon src="sap-icon://expand" press="onRowShiftAction"></core:Icon>
+                                                                <Table fixedLayout="false" items="{path:'RDetails>data/', templateShareable:false, filters: [
+                                                               {
+                                                                   path: 'Comprole', 
+                                                                   operator: 'NotStartsWith', 
+                                                                   value1: '[BR]'
+                                                                }
+                                                              ]}" visible="false">
+                                                                    <items>
+                                                                        <ColumnListItem >
+                                                                            <cells>
+                                                                                <Text text="{RDetails>Resourceid}"/>
+
+                                                                                <!-- <Text text="{ parts: [ 'RDetails>Resourceextn', 'RDetails>Fromval', 'RDetails>Toval' ], formatter: '.formatter.ValFromTo' }"/> -->
+                                                                                <Text text="{ parts: [ 'RDetails>Resourceextn', 'RDetails>Fromval', 'RDetails>Toval' ] }"/>
+                                                                                
+                                                                                <Text text="{RDetails>Comprole}"/>
+                                                                                <Text text="{RDetails>Role}"/>
+                                                                                <Text text="{RDetails>Roledesc}"/>
+                                                                                <!--<core:Icon src="sap-icon://expand" press="onRowShiftAction"></core:Icon>-->
+                                                                            </cells>
+                                                                        </ColumnListItem>
+                                                                    </items>
+                                                                    <columns>
+                                                                        <Column>
+                                                                            <header>
+                                                                                <Label text="Object"/>
+                                                                            </header>
+                                                                        </Column>
+                                                                        <Column>
+                                                                            <header>
+                                                                                <Label text="Field : Values"/>
+                                                                            </header>
+                                                                        </Column>
+                                                                        <Column>
+                                                                            <header>
+                                                                                <Label text="Role"/>
+                                                                            </header>
+                                                                        </Column>
+                                                                        <Column>
+                                                                            <header>
+                                                                                <Label text="Single Role ID"/>
+                                                                            </header>
+                                                                        </Column>
+                                                                        <Column>
+                                                                            <header>
+                                                                                <Label text="Single Role Desc."/>
+                                                                            </header>
+                                                                        </Column>
+
+                                                                        <!--<Column hAlign="Center" visible="true">-->
+                                                                        <!--	<Label text="Transactions"/>-->
+                                                                        <!--</Column>-->
+                                                                    </columns>
+                                                                </Table>
+                                                                <!--<core:Icon src="sap-icon://expand" press="onRowShiftAction"></core:Icon>-->
+                                                            </cells>
+                                                        </ColumnListItem>
+                                                    </items>
+                                                    <columns>
+                                                        <Column>
+                                                            <header>
+                                                                <Label text="Transaction"/>
+                                                            </header>
+                                                        </Column>
+                                                        <Column>
+                                                            <header>
+                                                                <Label text="Description"/>
+                                                            </header>
+                                                        </Column>
+                                                        <Column>
+                                                            <header>
+                                                                <Label text="Business Role"/>
+                                                            </header>
+                                                        </Column>
+                                                        <Column>
+                                                            <header>
+                                                                <Label text="Single Role ID"/>
+                                                            </header>
+                                                        </Column>
+                                                        <Column>
+                                                            <header>
+                                                                <Label text="Single Role Desc."/>
+                                                            </header>
+                                                        </Column>
+                                                        <Column>
+                                                            <header>
+                                                                <Label text="Execution Count"/>
+                                                            </header>
+                                                        </Column>
+                                                        <Column >
+                                                            <header>
+                                                                <Label text="Last Execution"/>
+                                                            </header>
+                                                        </Column>
+                                                        <Column hAlign="Center" visible="true">
+                                                            <Label text="Objects"/>
+                                                        </Column>
+                                                        <Column visible="true" minScreenWidth="1900px" demandPopin="true"/>
+                                                        <!--<Column hAlign="Center" visible="true">-->
+                                                        <!--	<Label text="Transactions"/>-->
+                                                        <!--</Column>-->
+                                                    </columns>
+                                                </Table>
+                                            </CustomListItem>
+                                        </items>
+                                    </List> 
+
+
+
+                                </uxap:blocks>
+                            </uxap:ObjectPageSubSection>
+                        </uxap:subSections>
+                    </uxap:ObjectPageSection>
+                </uxap:sections>
+
+            </uxap:ObjectPageLayout>
+
+        </f2:midColumnPages>
+    </f2:FlexibleColumnLayout>
+
+
+
+
+	<!--</Shell> -->
+</mvc:View>

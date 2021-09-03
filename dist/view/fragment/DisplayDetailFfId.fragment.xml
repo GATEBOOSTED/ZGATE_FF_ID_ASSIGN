@@ -1,0 +1,19 @@
+<core:FragmentDefinition
+	xmlns:fv="sap.ui.comp.valuehelpdialog"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    xmlns="sap.m">
+
+    <Dialog contentWidth="40%" contentHeight="15rem">
+        <VBox items="{path: 'FirefighterIdDetailModel>/results'}" width="100%" alignContent="Center">
+            <Panel expandable="true" headerText="{FirefighterIdDetailModel>RoleName}" width="auto" expanded="true" class="sapUiResponsiveMargin">
+                <FormattedText htmlText='{FirefighterIdDetailModel>Text}'/>
+            </Panel>
+        </VBox>
+
+        <endButton>
+            <Button text="{i18n>lblClose}"  press="onCloseDisplayDetailFfId"    type="Reject"/>
+        </endButton>
+   </Dialog>
+
+</core:FragmentDefinition>

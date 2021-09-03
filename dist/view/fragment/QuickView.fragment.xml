@@ -1,0 +1,11 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<QuickView width="30rem">
+		<QuickViewPage>
+			<QuickViewGroup >
+				<QuickViewGroupElement
+                    value="{GlobalData>/MsgQuickView}"
+                    type="text" />
+			</QuickViewGroup>
+		</QuickViewPage>
+	</QuickView>
+</core:FragmentDefinition>

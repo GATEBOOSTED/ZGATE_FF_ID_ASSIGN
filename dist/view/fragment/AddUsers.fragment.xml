@@ -1,0 +1,177 @@
+<core:FragmentDefinition
+	xmlns:fv="sap.ui.comp.valuehelpdialog"    
+    xmlns:tab="sap.ui.table"
+    xmlns:dnd="sap.ui.core.dnd"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:l="sap.ui.layout"
+    xmlns="sap.m">
+
+    <Dialog title="{i18n>lblAddUsers}" contentWidth="70%" contentHeight="31rem">
+        <l:VerticalLayout width="100%">
+            <fb:FilterBar search="onSearchUsers" showRestoreButton="true" showClearButton="true">
+                <fb:filterGroupItems>
+                    <!-- <fb:FilterGroupItem visible="false" groupName="G1" name="A" label="{i18n>lblSystem}" partOfCurrentVariant="true" visibleInFilterBar="true">
+                        <fb:control>
+                            <Select
+                                id="sUserSystem"
+                                forceSelection="false"
+                                class="sapUiSmallMarginEnd"
+                                items="{
+                                    path: '/SystemsSet',
+                                    templateShareable:false,
+                                    sorter: { path: 'Connector' }
+                                }">            
+                                <core:Item key="{Connector}" text="{Connector}" />
+                            </Select>
+                        </fb:control>
+                    </fb:FilterGroupItem> -->
+                    <fb:FilterGroupItem groupName="G2" name="A" label="{i18n>lblFind}" partOfCurrentVariant="true" visibleInFilterBar="true">
+                        <fb:control>
+                            <Input id="iFieldValue" value="*" submit="onSearchUsers"  class="sapUiSmallMarginEnd"/>  
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem groupName="G3" name="B" label="{i18n>lblIn}" partOfCurrentVariant="true" visibleInFilterBar="true">
+                        <fb:control>
+                            <Select id="sSearchBy"  class="sapUiSmallMarginEnd">
+                                <items>
+                                    <core:Item text="{i18n>lblUserFname}"    key="FNAME"/>
+                                    <core:Item text="{i18n>lblUserLname}"    key="LNAME"/>
+                                    <core:Item text="{i18n>lblUserUserId}"   key="USER"/>
+                                    <core:Item text="{i18n>lblUserEmail}"    key="EMAIL"/>
+                                </items>                
+                                <layoutData>
+                                    <FlexItemData growFactor="1" />
+                                </layoutData>
+                            </Select>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    
+                </fb:filterGroupItems>				
+            </fb:FilterBar>		
+        </l:VerticalLayout>
+
+        <HBox renderType="Bare">
+
+            <tab:Table
+                id="UserTable1"
+                selectionMode="MultiToggle"
+                alternateRowColors="true"
+                visibleRowCount="8"
+                rows="{
+                        path: 'AvailableUsersModel>/results',
+                        filters: {path: 'Rank', operator: 'EQ', value1: ''},
+                        sorter: {path: 'UserId', descending: false}
+                        }"
+                >
+                <tab:extension>
+                    <OverflowToolbar>
+                        <Title text="{i18n>lblAvailableUsers}"/>
+                        <ToolbarSpacer/>
+                    </OverflowToolbar>
+                </tab:extension>
+                <tab:columns>
+                    <tab:Column
+                        sortProperty="UserID"
+                        filterProperty="UserID">
+                        <Text text="{i18n>lblUserId}" />
+                        <tab:template>
+                            <Text text="{AvailableUsersModel>UserId}" wrapping="false" />
+                        </tab:template>
+                    </tab:Column>
+
+                    <tab:Column>
+                        <Text text="{i18n>lblUserFullName}" />
+                        <tab:template>
+                            <Text text="{AvailableUsersModel>FirstName} {AvailableUsersModel>LastName} " wrapping="false" />
+                        </tab:template>
+                    </tab:Column>
+
+                </tab:columns>
+                <tab:dragDropConfig>
+                    <dnd:DragInfo
+                        groupName="UserMoveToTable2"
+                        sourceAggregation="rows"
+                        dragStart="onUserDragStart" />
+                    <dnd:DropInfo
+                        groupName="UserMoveToTable1"
+                        drop="onUserDropTable1" />
+                </tab:dragDropConfig>
+            </tab:Table>
+
+
+            <VBox justifyContent="Center" class="sapUiTinyMarginBeginEnd">
+                <Button
+                    class="sapUiTinyMarginBottom"
+                    icon="sap-icon://navigation-right-arrow"
+                    tooltip="{i18n>lblMoveToSelected}"
+                    press="UserMoveToTable2"/>
+                <Button
+                    icon="sap-icon://navigation-left-arrow"
+                    tooltip="{i18n>lblMoveToAvailabled}"
+                    press="UserMoveToTable1"/>
+            </VBox>
+            <tab:Table
+                id="UserTable2"
+                selectionMode="MultiToggle"
+                alternateRowColors="true"
+                visibleRowCount="8"
+                noData="{i18n>lblDragAndDropHere}"
+                rows="{
+                        path: 'AvailableUsersModel>/results',
+                        filters: {path: 'Rank', operator: 'NE', value1: ''},
+                        sorter: {path: 'UserId', descending: false}
+                        }">
+                <tab:extension>
+                    <OverflowToolbar>
+                        <Title text="{i18n>lblSelectedUsers}"/>
+                        <ToolbarSpacer/>
+                    </OverflowToolbar>
+                </tab:extension>
+                <tab:columns>
+                    <tab:Column>
+                        <Text text="{i18n>lblUserId}" />
+                        <tab:template>
+                            <Text text="{AvailableUsersModel>UserId}" wrapping="false" />
+                        </tab:template>
+                    </tab:Column>
+
+                    <tab:Column>
+                        <Text text="{i18n>lblUserFullName}" />
+                        <tab:template>
+                            <Text text="{AvailableUsersModel>FirstName} {AvailableUsersModel>LastName} " wrapping="false" />
+                        </tab:template>
+                    </tab:Column>
+                    
+                </tab:columns>
+                <tab:dragDropConfig>
+                    <dnd:DragInfo
+                        groupName="UserMoveToTable1"
+                        sourceAggregation="rows"
+                        dragStart="onUserDragStart" />
+                    <dnd:DropInfo
+                        groupName="UserMoveToTable2"
+                        targetAggregation="rows"
+                        dropPosition="Between"
+                        drop="onUserDropTable2" />
+                    <dnd:DragDropInfo
+                        sourceAggregation="rows"
+                        targetAggregation="rows"
+                        dropPosition="Between"
+                        dragStart="onUserDragStart"
+                        drop="onUserDropTable2" />
+                </tab:dragDropConfig>
+            </tab:Table>
+        </HBox> 
+        
+        <beginButton>
+            <Button text="{i18n>lblOK}"     press="OnSubmitAddUsersDialog"   type="Accept"/>
+        </beginButton>
+        <endButton>
+            <Button text="{i18n>lblClose}"  press="onCloseAddUsersDialog"    type="Reject"/>
+        </endButton>
+            
+   </Dialog>
+
+</core:FragmentDefinition>
