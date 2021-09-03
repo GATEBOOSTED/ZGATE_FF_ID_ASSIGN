@@ -1,0 +1,58 @@
+<core:FragmentDefinition
+	xmlns:fv="sap.ui.comp.valuehelpdialog"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:u="sap.ui.unified"
+    xmlns="sap.m"
+    class="viewPadding">
+
+    <Dialog contentWidth="50%" contentHeight="17rem" title="{i18n>lblAddAttachment}">
+
+    
+        <VBox alignContent="Center" class="sapUiSmallMargin">
+            <f:Form editable="true">
+                <f:layout>
+                    <f:ColumnLayout/>
+                </f:layout>
+                <f:formContainers>
+                    <f:FormContainer>
+                        <f:formElements>
+                            <f:FormElement label="{i18n>lblAddAttachmentTitle}">
+                                <f:fields>
+                                    <Input id="iTitle" value="{GlobalData>/AttachmentTitle}" width="50%"/>
+                                </f:fields>
+                            </f:FormElement> 
+                            <f:FormElement label="{i18n>lblAddAttachmentType}">
+                                <RadioButtonGroup id="rbgAttachmentType">
+                                    <RadioButton groupName="GroupA" text="{i18n>lblAddAttachmentFile}" selected="true" width="50%" select="onSelectAttachmentType"/>
+                                    <RadioButton groupName="GroupA" text="{i18n>lblAddAttachmentLink}" width="50%" />
+                                </RadioButtonGroup>
+                            </f:FormElement>
+
+                            <f:FormElement label="{i18n>lblAddAttachmentChooseFile}" visible="{ path : 'GlobalData>/AttachmentType', formatter: '.formatter.VisibilityFileData'}">
+                                <u:FileUploader
+                                    id="fileUploader"
+                                    uploadComplete="handleUploadComplete"/>
+                            </f:FormElement>
+
+                            <f:FormElement label="{i18n>lblAddAttachmentEnterLink}" visible="{ path : 'GlobalData>/AttachmentType', formatter: '.formatter.VisibilityLinkData'}">
+                        
+                                <TextArea id="iAttachmentLink" value="{GlobalData>/AttachmentLink}"/>
+                            </f:FormElement>
+
+                        </f:formElements>
+
+                    </f:FormContainer>
+                </f:formContainers>
+            </f:Form>
+        </VBox>
+        <beginButton>
+            <Button text="{i18n>lblAddAttachmentUpload}"  press="onUpload"    type="Accept" icon="sap-icon://upload"/>
+        </beginButton>
+        <endButton>
+            <Button text="{i18n>lblClose}"  press="onCloseAttachments"    type="Reject" icon="sap-icon://sys-cancel"/>
+        </endButton>
+   </Dialog>
+
+</core:FragmentDefinition>
